@@ -1,1 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Strength Checker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(-45deg, #ff758c, #ff7eb3, #fad0c4, #ffdde1);
+            background-size: 400% 400%;
+            animation: gradientBG 8s ease infinite;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.5); /* Darker glass effect */
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 350px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        h2 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+        .input-box {
+            position: relative;
+            width: 100%;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #fff;
+            border-radius: 5px;
+            outline: none;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        .toggle-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 18px;
+            color: white;
+        }
+        .strength-bar {
+            height: 6px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.3);
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        .strength {
+            height: 100%;
+            width: 0%;
+            border-radius: 5px;
+            transition: width 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .weak { background: red; width: 33%; box-shadow: 0 0 8px red; }
+        .medium { background: orange; width: 66%; box-shadow: 0 0 8px orange; }
+        .strong { background: limegreen; width: 100%; box-shadow: 0 0 10px limegreen; }
+        .strength-text {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
 
+    <div class="container">
+        <h2>Password Strength Checker</h2>
+        <div class="input-box">
+            <input type="password" id="password" placeholder="Enter password">
+            <span class="toggle-btn" onclick="togglePassword()">👁️</span>
+        </div>
+        <div class="strength-bar">
+            <div class="strength" id="strength"></div>
+        </div>
+        <p class="strength-text" id="strength-text">Strength: </p>
+    </div>
+
+    <script>
+        function checkStrength(password) {
+            let strength = document.getElementById("strength");
+            let strengthText = document.getElementById("strength-text");
+            let weakPattern = /^[a-zA-Z0-9]{1,5}$/;
+            let mediumPattern = /^(?=.*[0-9])(?=.*[a-zA-Z]).{6,10}$/;
+            let strongPattern = /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@#$%^&+=!]).{10,}$/;
+
+            if (strongPattern.test(password)) {
+                strength.className = "strength strong";
+                strengthText.textContent = "Strength: Strong 💪";
+            } else if (mediumPattern.test(password)) {
+                strength.className = "strength medium";
+                strengthText.textContent = "Strength: Medium ⚠️";
+            } else if (weakPattern.test(password)) {
+                strength.className = "strength weak";
+                strengthText.textContent = "Strength: Weak ❌";
+            } else {
+                strength.className = "strength";
+                strengthText.textContent = "Strength: ";
+            }
+        }
+
+        document.getElementById("password").addEventListener("input", function () {
+            checkStrength(this.value);
+        });
+
+        function togglePassword() {
+            let passwordInput = document.getElementById("password");
+            let toggleBtn = document.querySelector(".toggle-btn");
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleBtn.textContent = "🙈";
+            } else {
+                passwordInput.type = "password";
+                toggleBtn.textContent = "👁️";
+            }
+        }
+    </script>
+
+</body>
+</html>
